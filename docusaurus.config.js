@@ -34,6 +34,23 @@ const config = {
     locales: ['en'],
   },
 
+
+  plugins: [
+    [
+      '@scalar/docusaurus',
+      {
+        label: 'Scalar',
+        route: '/scalar',
+        configuration: {
+          spec: {
+            // Put the URL to your OpenAPI document here:
+            url: 'https://drive.google.com/file/d/1rpBzTCF7Ct9zvuPWvcRCUU9VYhRXiQwd/view?usp=sharing',
+          },
+        },
+      },
+    ],
+  ],
+
   presets: [
     [
       'classic',

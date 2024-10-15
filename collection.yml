@@ -1,0 +1,5411 @@
+openapi: 3.0.0
+info:
+  title: METAADS
+  description: >-
+    Business Managers are a way for Meta to associate assets that include ad
+    accounts, the Meta Pixel, business users, ad activity, and more to a
+    business. Meta expects to use Business Managers as a container to represent
+    a business.
+
+
+    The 2-Tier Business Manager solution is a scalable solution for a Business
+    Manager to create and manage child businesses, and allows you to:
+
+
+    - Create and delete hundreds or thousands of small Business Managers (Child
+    Business Managers) underneath a Parent Business Manager.
+        
+    - Create a small business presence.
+        
+    - Create assets for the user.
+        
+    - Offer Facebook ads to your end user on your website or platform.
+        
+
+    EndFragment
+
+
+    Read More at -
+    [https://developers.facebook.com/docs/marketing-api/2tier-bm-solution/](https://developers.facebook.com/docs/marketing-api/2tier-bm-solution/)
+  version: 1.0.0
+servers:
+  - url: https://graph.facebook.com
+  - url: http://{{meta_base_url}}
+  - url: http://localhost:5001
+  - url: http://{{meta_base_url_new}}
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: 2-Tier ads
+    description: >-
+      Reference doc for all api use case and flow :-
+      [https://developers.facebook.com/docs/marketing-api/2tier-bm-solution/guides/setup-cbm](https://developers.facebook.com/docs/marketing-api/2tier-bm-solution/guides/setup-cbm)
+  - name: 'AISensy two tier '
+  - name: On Behalf of
+  - name: Look alike audience
+paths:
+  /v19.0/1215672488927258/owned_businesses:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Create a Child Business Manager
+      description: |-
+        - **Headers**:
+            
+            - `Authorization: Bearer`
+                
+                - The **authorization token** required to authenticate the request.
+                    
+                - `EAALXBdIwKjQBA...` is the **long-lived access token** that grants access to the Facebook API.
+                    
+        - **Form Data**:
+            
+            - `id`: `"1215672488927258"`
+                
+                - This is the **parent Business Manager ID** under which the new child BM will be created.
+                    
+            - `name`: `"Test Child BM 02"`
+                
+                - This is the **name of the new child Business Manager** to be created. In this case, the name is `"Test Child BM 02"`.
+                    
+            - `vertical`: `"OTHER"`
+                
+                - This specifies the **vertical (or industry)** of the new child BM. It can be one of the following options depending on the business type: `"ADVERTISING_AGENCY"`, `"AUTOMOTIVE"`, `"CONSUMER_PACKAGED_GOODS"`, `"ECOMMERCE"`, `"ENTERTAINMENT_AND_MEDIA"`, `"GAMING"`, `"FINANCIAL_SERVICES"`, etc.
+                    
+                - Here, `"OTHER"` is used, indicating a general or undefined vertical.
+                    
+            - `shared_page_id`: `"286772371178056"`
+                
+                - This is the **Facebook Page ID** that will be shared with the new child BM. The page associated with this ID will be linked to the new BM and can be managed through it.
+                    
+            - `page_permitted_tasks`: `["MANAGE", "CREATE_CONTENT", "MODERATE", "MESSAGING", "ADVERTISE", "ANALYZE"]`
+                
+                - These are the **permissions or tasks** allowed for the shared Facebook page under the new child BM.
+                    
+                - Permissions include:
+                    
+                    - `"MANAGE"`: Full control over the Page, including settings and roles.
+                        
+                    - `"CREATE_CONTENT"`: Ability to post content on behalf of the Page.
+                        
+                    - `"MODERATE"`: The ability to moderate comments and reviews.
+                        
+                    - `"MESSAGING"`: Ability to manage Page messaging (e.g., responding to messages).
+                        
+                    - `"ADVERTISE"`: Ability to run ads for the Page.
+                        
+                    - `"ANALYZE"`: Ability to view Page Insights and performance metrics.
+                        
+            - `timezone_id`: `"1"`
+                
+                - This is the **timezone ID** for the new child BM. Each number represents a specific timezone. In this case, `1` refers to **GMT (Greenwich Mean Time)**.
+                    
+            - `access_token`: `"EAALXBdIwKjQBOzWazYXgcWrZAkXiJZCdIQQzAGhwslBWJvUUiTgoTFCDjJOwtGOZBApe5uMtcpouTDpJh2CkAnmi2rTZBvI"`
+                
+                - This is the **access token** used for authenticating the request. It should be a valid token with sufficient permissions to create a child BM under the parent BM.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '{{PARENT_BM_ID}}'
+                name:
+                  type: string
+                  example: Test Child BM X1
+                vertical:
+                  type: string
+                  description: Specify the Business vertical
+                  example: OTHER
+                shared_page_id:
+                  type: string
+                  description: >-
+                    Optional parameter but needed if you want to publish ads
+                    promoting this page
+
+                    Note: the user must be an admin of the BM that owns this
+                    page if this page is owned
+                  example: '{{PAGE_ID}}'
+                page_permitted_tasks:
+                  type: string
+                  example: >-
+                    ["MANAGE", "CREATE_CONTENT", "MODERATE", "MESSAGING",
+                    "ADVERTISE", "ANALYZE"]
+                timezone_id:
+                  type: integer
+                  example: '1'
+                access_token:
+                  type: string
+                  example: '{{USER_ACCESS_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  description: Optional, depending on your app's security settings
+                primary_page:
+                  type: integer
+                  example: '239128275950147'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            EAALXBdIwKjQBAIXQE31QKnKQ72lzRH9HseTNxnXPOvsTALamWMkqjTPalttMKuXQOnD6P7MTdMCzYnpYJpZBcinEtEB8fZBZAwTOlJdAHXZBtEdTpY7qyUlBPvUw29Hw2XWGzyVwDYYAz2mZCuZBJiWfwNfKqLSg7dJjXhp5QSLD4aP724Szwh
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            x-fb-insights-stability-throttle:
+              schema:
+                type: string
+                example: >-
+                  {"throttled":false,"backend_qps":{"actual_score":0,"limit":300000}}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AmlegDpaQzkbLUajI39G5Gx
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: CUWoAl8215x
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  rQsiFk+FnIcCs8M7jYyQm6gERdfYHLVX0y1E5FgTfhWI0208cL7bnnXecaVvUV2V8A895tDQSEEHhg5gl5qL2Q==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:15:45 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '24'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '327070553136366'
+    get:
+      tags:
+        - 2-Tier ads
+      summary: Get a Child Business Manager
+      description: |-
+        - **name**:
+            
+            - The name of the **owned business**.
+                
+            - Example: `"Test Child BM 02"`
+                
+        - **vertical**:
+            
+            - The **industry** or **business vertical** of the owned business.
+                
+            - Common verticals include: `RETAIL`, `E_COMMERCE`, `OTHER`, etc.
+                
+            - Example: `"vertical": "OTHER"`
+                
+        - **relationship**:
+            
+            - Describes the **relationship** between the parent **Business Manager** and the **owned business**.
+                
+            - Example: `"relationship": "client"` or `"relationship": "partner"`
+                
+        - **shared_page**:
+            
+            - The **Facebook Page** that is shared or linked with the owned business.
+                
+            - This is useful for identifying the public-facing entity of the business.
+                
+            - Example: `"shared_page": "286772371178056"`
+                
+        - **page_permitted_tasks**:
+            
+            - Lists the **tasks** the owned business can perform on the linked/shared page.
+                
+            - Permitted tasks may include:
+                
+                - `MANAGE`: Can manage the page (e.g., update info, add admins).
+                    
+                - `CREATE_CONTENT`: Can post and create content on the page.
+                    
+                - `MODERATE`: Can moderate content (e.g., respond to comments).
+                    
+                - `ADVERTISE`: Can run ads associated with the page.
+                    
+                - `ANALYZE`: Can view page insights and analytics.
+                    
+            - Example: `"page_permitted_tasks": ["MANAGE", "CREATE_CONTENT", "MODERATE", "ADVERTISE", "ANALYZE"]`
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            EAALXBdIwKjQBAIXQE31QKnKQ72lzRH9HseTNxnXPOvsTALamWMkqjTPalttMKuXQOnD6P7MTdMCzYnpYJpZBcinEtEB8fZBZAwTOlJdAHXZBtEdTpY7qyUlBPvUw29Hw2XWGzyVwDYYAz2mZCuZBJiWfwNfKqLSg7dJjXhp5QSLD4aP724Szwh
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            name,vertical,relationship,shared_page,page_permitted_tasks,primary_page
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            ETag:
+              schema:
+                type: string
+                example: '"0877bdb6d5956fee10acd8588eadec8e415f1245"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}],"1345413239725489":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: ApzrWI2byH6FjsWOl8UiMtE
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: GVdZowkCXRc
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  pT1HCZoVH8099q5OZEjhMBmL7hxb+Sr7uA37+9t31MT4bW7fv1jbxJXyyPAD6ZMYYvf3mzIJJr2BzWnYkUjwGA==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:22:48 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: close
+            Content-Length:
+              schema:
+                type: integer
+                example: '531'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - name: Test Child BM 02
+                    vertical: OTHER
+                    id: '327070553136366'
+                    relationship:
+                      system_user:
+                        id: '122097656828224517'
+                        name: Test Child BM 02 ADMIN SYSTEM USER
+                      application:
+                        category: Business
+                        link: https://app.aisensy.com/
+                        name: AiSensy
+                        id: '799369954601524'
+                      ad_accounts:
+                        - account_id: '1542970516481575'
+                          id: act_1542970516481575
+                  - name: Test Child BM 01
+                    vertical: OTHER
+                    id: '234740395579415'
+                    relationship:
+                      system_user:
+                        id: '116454461356642'
+                        name: Test Child BM 01 ADMIN SYSTEM USER
+                      application:
+                        category: Business
+                        link: https://app.aisensy.com/
+                        name: AiSensy
+                        id: '799369954601524'
+                      ad_accounts:
+                        - account_id: '1345413239725489'
+                          id: act_1345413239725489
+                paging:
+                  cursors:
+                    before: >-
+                      QVFIUlN2eWt3TDFERTFabWhxWXJMSEZAUMVg1U3Q2bkJLWkFVQmNfUUpUUjY1N1hfQVBHNHB0T0cxZAVV1RlI4LS00cHF6aEpWSmVBUDRCc0RuWmpRSU1fMm9B
+                    after: >-
+                      QVFIUmo1YS1HQWFRQks2aU9qcnVQUXVNeWxfS2JvOVNqV09ULW1KMXRzYVptV3FzTUVNNEN2YjAtQUJub0w5Y05GZAHdZAVW1vODVmdkdaWFgxektGTDk4eTZAR
+  /v19.0/{PARENT_BM_ID}/owned_businesses:
+    delete:
+      tags:
+        - 2-Tier ads
+      summary: Delete a Child Business Manager
+      description: >-
+        - `client_id`: `"916119000223951"`
+            
+            - This is the **client ID** that uniquely identifies the application making the API request.
+                
+            - In this case, the client ID is `916119000223951`, which likely refers to the app or integration linked with this Business Manager operation.
+                
+        - `access_token`:
+        `"EAALXBdIwKjQBAIXQE31QKnKQ72lzRH9HseTNxnXPOvsTALamWMkqjTPalttMKuXQOnD6P7MTdMCzYnp"`
+            
+            - This is the **access token** used to authenticate the request. The access token grants the application or user permissions to perform this action (deleting an owned business).
+                
+            - Make sure the token has sufficient scope and permissions to perform delete operations on Business Manager resources.
+      parameters:
+        - name: PARENT_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AuF0cvbIo_PWncrHrGkNsdH
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: FK0EQo4w7Eq
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  RJRNL7+xcNatRy2tyYQ69RgnejQUZeVCr/iHEIZJCQTY4pWCHREb6VpGUjarkEf8pd/hiRyTkowWBd8n3veTtw==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:15:20 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '16'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /v19.0/{LINE_OF_CREDIT}/owning_credit_allocation_configs:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Fetch the line of credit ID and share with child Business Manager
+      description: >-
+        **receiving_business_id**:
+
+
+        - The **ID** of the Business Manager that is the **recipient** of the
+        line of credit.
+            
+        - This should be the **child Business Manager** that will receive credit
+        allocation from the **parent Business Manager**.
+            
+        - **access_token**:
+            
+            - An **authentication token** that has sufficient permissions to **manage line of credit allocations** and other finance-related actions within Business Manager.
+                
+            - The token should be associated with a user who has financial permissions on the **parent Business Manager** (owning the line of credit).
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                receiving_business_id:
+                  type: integer
+                  example: '965928961812422'
+                amount:
+                  type: string
+                  example: <OPTIONAL_PARAMETER>
+                access_token:
+                  type: string
+                  example: '{{PARENT_SYSTEM_USER_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: <APP_SECRET>
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: LINE_OF_CREDIT
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AL691LuF3mHXLVqWxn44Cxj
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: CdcTXpxG11a
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  0iGhuukNki5Dqptnh8MawUhvXFxu4Y2g/4jzFhBIaK1DxbKiT5aDN9QvgMKpEt/Afzr7nPsCSSv2f7UGEJiIKg==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:17:31 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '24'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '389245373706346'
+  /v19.0/{childBmId}/access_token:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Get the Child System User Token
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '{{CHILD_BM_ID}}'
+                app_id:
+                  type: string
+                  example: '{{App_ID}}'
+                scope:
+                  type: string
+                  example: ads_management,business_management
+                access_token:
+                  type: string
+                  example: '{{PARENT_SYSTEM_USER_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: '{{APP_SECRET}}'
+      parameters:
+        - name: childBmId
+          in: path
+          schema:
+            type: string
+          required: true
+          example: '{{CHILD_BM_ID}}'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: A5CWUjW6kR5xlzG3oDVRa6E
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: HEb4ZMXJ+4q
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  eWfhVxFwzTHb8RAYAhdCBjzii4Ekr9DsJFQ1gkYgxjCyFbrMcx4fR/PJzeaXaERm2GN2BN91lpNhMslpCnBOKQ==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:17:44 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '219'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                access_token: >-
+                  EAALXBdIwKjQBO67P4OyIcPbLZBvXR4QjOVOusHfeGxiWGpRG5i3VeiL3cfu6pZA21tJTwvElFZAnX2ymnU2gX3HEhgg1cf9GPlJw70ZAvCSijqyl8WgLIEl8ZADzYg0IILrvZAskYctnPusFZBZC1OE7pO99h3IJ4cBqMz5b7fcDBl4UMDBgOm1oZCBfdxpOdZBSZBg
+  /v19.0/{CHILD_BM_ID}/system_users:
+    get:
+      tags:
+        - 2-Tier ads
+      summary: Fetch the System User's ID
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: role,system_user_id,name
+        - name: CHILD_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            ETag:
+              schema:
+                type: string
+                example: '"916253d0b644b9445a7234e29f19ce6b2740a3e0"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AHvmz9-r9rW8Kr7wZ3_yoe7
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: FSZz1YWYrDs
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  mgKc7ScxSxkuNIBzyXCifTvveEhT41bWzTj7f/QwKRuJLejDdoqxGbY7R7tT9fJ327dSOF31PICLrRRhFoP1wA==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:17:58 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '234'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - name: Test Child BM 02 ADMIN SYSTEM USER
+                    id: '122097656828224517'
+                    role: ADMIN
+                paging:
+                  cursors:
+                    before: >-
+                      QVFIUlRHSExGRVRwZA21MTy0zZAnVpczg2NFFBZAk91b3VVbkZAFVTdKUEVDZAWZAfZA2d0clhWU0l6ZAmVRNXlJRzEzek54RWtJaTM0cGttUThnR0V5Wll0dHFCVVlR
+                    after: >-
+                      QVFIUlRHSExGRVRwZA21MTy0zZAnVpczg2NFFBZAk91b3VVbkZAFVTdKUEVDZAWZAfZA2d0clhWU0l6ZAmVRNXlJRzEzek54RWtJaTM0cGttUThnR0V5Wll0dHFCVVlR
+  /v19.0/{childBmId}/extendedcredits:
+    get:
+      tags:
+        - 2-Tier ads
+      summary: Get the Funding Source ID (LOC)
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: id,max_balance
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+        - name: childBmId
+          in: path
+          schema:
+            type: string
+          required: true
+          example: '{{CHILD_BM_ID}}'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: '"dad26425aa99c6e31e9b8d9bac4a3b88db37870e"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AfTGWVOSQ-noqV9W9-CIB9h
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: DRJ613Y+fL0
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  uZ1MilmO/wxlf1Y7/XrdandnaI5mgGH1xpwEWlqdi8UVXCW+Nq7hkWhjAwgWS++7SRJ7ln/h2/ULK74xsnDRyg==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:18:04 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '156'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - id: '7141971789251729'
+                    max_balance:
+                      amount: 9,99,999.99
+                      amount_in_hundredths: '99999999'
+                      currency: USD
+                      offsetted_amount: '99999999'
+  /v19.0/{CHILD_BM_ID}:
+    get:
+      tags:
+        - 2-Tier ads
+      summary: FInd child bm details
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: CHILD_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: '"8189b41d9be04245690a5381e7f41849fa8861eb"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: ALLAahGIbIVs4dgo98erfIc
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: EWAnafikdGx
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011578107'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  Oa5GMus1E3W25+x/I1QoUUJJzV0EE1YTGQwlkurToO8ai6S1cwyryBmjuT95M67IgOhHmkyZ92J1GtIJ29G/mg==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 11:03:04 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '50'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '327070553136366'
+                name: Test Child BM 02
+  /v17.0/{CHILD_BM_ID}/adaccount:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Create a New Ad Account with the Default Funding Source
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Aisensy Shared Page 1 Ads
+                currency:
+                  type: string
+                  example: INR
+                timezone_id:
+                  type: integer
+                  example: '1'
+                end_advertiser:
+                  type: string
+                  example: '{{PAGE_ID}}'
+                media_agency:
+                  type: string
+                  example: NONE
+                partner:
+                  type: string
+                  example: NONE
+                funding_id:
+                  type: string
+                  example: '{{FUNDING_ID}}'
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: <APP_SECRET>
+      parameters:
+        - name: CHILD_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            x-fb-insights-stability-throttle:
+              schema:
+                type: string
+                example: >-
+                  {"throttled":false,"backend_qps":{"actual_score":0,"limit":300000}}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: Ap_O7HOnVoT1TmqpAFc3PMX
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: FNBNSshStoE
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  48MxaHOxuxhjdsKM1V1GiUJpED8Mj0fi/DcYMmhiUXmtROkhHSvb+wvsHMqIlE/6lqSywHCwL2LNIJZYZJUq4w==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:18:36 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '149'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: act_1542970516481575
+                account_id: '1542970516481575'
+                business_id: '327070553136366'
+                end_advertiser_id: '628222690902382'
+                media_agency_id: NONE
+                partner_id: NONE
+                seer_ad_account_restricted_by_soft_desc_challenge: false
+  /v19.0/{AD_ACCOUNT_ID}/assigned_users:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Add the System User as an Admin to the New Ad Account
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_ID}}'
+                tasks:
+                  type: string
+                  example: MANAGE,ADVERTISE,ANALYZE
+                business:
+                  type: string
+                  example: '{{CHILD_BM_ID}}'
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: <APP_SECRET>
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AN89P2IeK9v-9tykXOtjRJQ
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: EnNVC1Nx5vs
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  hUxJHAk/weC6TIST34mIMp0WszVysOuKhxC6t6a9cjgeAIGM/WELkPfWA2iwI9uNPy0Zy+6IUyHefmUa1crZ1Q==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:45:26 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '16'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /v19.0/{AD_ACCOUNT_ID}/ads:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Schedule Delivery
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My Ads
+                adset_id:
+                  type: string
+                  example: '{{AD_SET_ID}}'
+                creative:
+                  type: string
+                  example: |-
+                    {
+                           "creative_id": "{{AD_CREATIVE_ID}}"
+                         }
+                status:
+                  type: string
+                  example: ACTIVE
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AB7CIyG3PKfPRzR06yq9MFt
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: BrOwcIEsPdx
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011645751'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  jNp+3LRQilMaP5GWrJeqCiHpSudzBpLvS0kkOpzGfgFNFdK0+yq9pit8vCTPfygZemapLoxgU8Mbzuo4S/FnJw==
+            Date:
+              schema:
+                type: string
+                example: Mon, 26 Feb 2024 06:55:04 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '27'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '120204862561940358'
+    get:
+      tags:
+        - 2-Tier ads
+      summary: ads insights
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: name,status
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v19.0/{CHILD_BM_ID}/access_token:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Fetch the access token of the system user
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '{{CHILD_BM_ID}}'
+                app_id:
+                  type: string
+                  example: '{{App_ID}}'
+                scope:
+                  type: string
+                  example: ads_management,business_management
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: <APP_SECRET_PROOF>
+      parameters:
+        - name: CHILD_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":7,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: A8ztIKdac3D22wxyBq9qetj
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: GhWCwkb/pep
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011576421'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  1IQnXxG9dtXynI/ANeJlgtV0olU2kxJ/LRrDHpHhXQf1fix+/ObF6qm5j0gYoyOx/nUtNsKNzko0z07YPbVtEQ==
+            Date:
+              schema:
+                type: string
+                example: Thu, 22 Feb 2024 08:34:32 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '215'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                access_token: >-
+                  EAALXBdIwKjQBO2hyHZB9KSrhmKY4nFCaZBcJDTUldxoAqbbI8b60G2CmDWMM3DngmJ7SemcWdPvqOldglSVjJ3h81avGnGYThOtZCZBg9hukmxZBx99O3D0ZCzysswRKOAI5hqiZAUkaupXQuJut8hzDNIpq2aqzdTmEXmasJ5hJAvTteDOGs7t7haV3X29lKJO
+  /v19.0/{CHILD_BM_ID}/business_users:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Add User in child bm
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: sablechetan8789@gmail.com
+                role:
+                  type: string
+                  example: EMPLOYEE
+                tasks:
+                  type: string
+                  example: '[''ADVERTISE'', ''ANALYZE'',''MANAGE'']'
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: <APP_SECRET_PROOF>
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: CHILD_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":8,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AzJXg2RuwFbPfej_EOwv2Tb
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: BENQk7Oxity
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011772035'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  1kXiFTqaKz6GMnha76VLk/3TnUhqgnNi95E10aJeNnhvmVSpH8lHYwvafxPM7PODQJ4eYBRyE6eYuFsKijbZWA==
+            Date:
+              schema:
+                type: string
+                example: Fri, 01 Mar 2024 18:15:26 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '25'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '1378051142857521'
+  /v19.0/{AD_ACCOUNT_ID}/campaigns:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Create Campaign
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My campaign
+                objective:
+                  type: string
+                  example: OUTCOME_TRAFFIC
+                status:
+                  type: string
+                  example: PAUSED
+                special_ad_categories:
+                  type: string
+                  example: '[]'
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":0,"total_cputime":0,"total_time":0,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AyWgHTbKxr6-hix7fbX3Stx
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: HzU+4nHvDWI
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011645751'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  cCo9Cu+fxX9XlDtVShh2iPnD8JvomvNiWL0Kc0YhGoT0WcSU6TdmMA3HcUhmydNU31ATnoG4V4Ra/kk1Ikg3bw==
+            Date:
+              schema:
+                type: string
+                example: Mon, 26 Feb 2024 06:15:57 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '27'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '120204861896160358'
+    get:
+      tags:
+        - 2-Tier ads
+      summary: get Campaign
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            ETag:
+              schema:
+                type: string
+                example: '"aaa202a5c51764d2058ad6cf91a5efbbd797d68c"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":0,"total_cputime":0,"total_time":0,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AwxOLjkuw2epatwNoh1iQsT
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: BvusBB4vt3l
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011768673'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  yJVSBdImoOUMGdJpH/wt7EJSLrWK9d01sK7cvf+PtXJiB+1C02MiGPrpoqG0WrM6O2mdO/0BGn0GK0HDPZbznA==
+            Date:
+              schema:
+                type: string
+                example: Fri, 01 Mar 2024 10:56:51 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '292'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - id: '120204861896160358'
+                  - id: '120204749914600358'
+                paging:
+                  cursors:
+                    before: >-
+                      QVFIUmdVMUxIaE44M20tXzRkNjRrYkE0YVZApcnMxb1ZAfT1dBRl9XVk1ybEhoTjh3dVZATOEdWVDMzRFZA3SnJRNElUaDE2eEhsWmhxWFZALLUI2akRQNnZAZAT2t3
+                    after: >-
+                      QVFIUlM4dzJKUGZASeEFvRDJKaGs1MklySnJELUFiY2MxMnFZAVXNPNVhYRGpRbDVkZAzVjb2dTSldQRjN4MmwyM1czU0V4T3lsY3Q5S0czalRpY29TZAnFZAMHJn
+  /v19.0/{campaignId}:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Pause Campaign
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: PAUSED
+                access_token:
+                  type: string
+                  example: <ACCESS_TOKEN>
+      parameters:
+        - name: campaignId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v19.0/{AD_ACCOUNT_ID}/adsets:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Update Ad Set
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My Ad Set
+                optimization_goal:
+                  type: string
+                  example: REACH
+                billing_event:
+                  type: string
+                  example: IMPRESSIONS
+                bid_amount:
+                  type: integer
+                  example: '2'
+                daily_budget:
+                  type: integer
+                  example: '1000'
+                campaign_id:
+                  type: string
+                  example: '{{CAMPAIGN_ID}}'
+                targeting:
+                  type: string
+                  example: >-
+                    {"geo_locations": {"countries":["US"]}, "interests": [{id:
+                    6003139266461, name: Movies}]}
+                start_time:
+                  type: string
+                  example: 2024-10-06T04:45:17+0000
+                status:
+                  type: string
+                  example: PAUSED
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AyYbQjQRC_WpoxMnjEwV70g
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: HlT3pSYRdAS
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011645751'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  JesxI3+9w/JBN8B82gBCeyas5eCFAPKmPpEly2zOvB6OSRDOIeBXE5UbdF8ACGvgUhZNOiToF93jlXgD20ecNw==
+            Date:
+              schema:
+                type: string
+                example: Mon, 26 Feb 2024 06:54:30 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            Content-Length:
+              schema:
+                type: integer
+                example: '27'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '120204862548090358'
+    get:
+      tags:
+        - 2-Tier ads
+      summary: get Ad Set
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            ETag:
+              schema:
+                type: string
+                example: '"189b6996780dfba9ee27556f3aa31a6416dacd22"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            x-ad-account-usage:
+              schema:
+                type: string
+                example: >-
+                  {"acc_id_util_pct":0,"reset_time_duration":0,"ads_api_access_tier":"standard_access"}
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":18,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: A5Jq8HAsWxq-fU-lzPTklSD
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: A2iInWBpd2m
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011768673'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  BMChJgk+kY7yKsJh8UgrwJZ3UUVTgs6y02iUiMXljhgbBZqPcyfdfCNj6MyXsREzu2crkw4fEjOzWoPI/CYQ7Q==
+            Date:
+              schema:
+                type: string
+                example: Fri, 01 Mar 2024 10:57:23 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '290'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - id: '120204862548090358'
+                  - id: '120204862029080358'
+                  - id: '120204750066460358'
+                paging:
+                  cursors:
+                    before: >-
+                      QVFIUnFqd2w4NFBPOW1mM2NEWG14U0xYUnAzdGlEd1M0LVJaeUhvUGJOV2JPREdiX2NnWGJMQWpZALVdlMFRjVURNajE3ZA2t6UDRhXzAyM1AxWm12cDU3cnFR
+                    after: >-
+                      QVFIUlQ2U1B6X3RVZA2p2eGZAQSUF2d1BzWEJPLTVOYzJ2RjltenMxOHVIVW4xTlZAsOGl5RFB4V0JWdjBIekN4a0liQ0tTaXNrZAWE5NUhoMjdPOGJwVVFRdjZAn
+  /v19.0/{AD_ACCOUNT_ID}/adimages:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Create Ad Image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  format: binary
+                access_token:
+                  type: string
+                  example: <ACCESS_TOKEN>
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AD9IPH-whk8TdPtJygK4O6e
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: GABjtaLrVCt
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011645346'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  Y6sMNRaSi2jBPTHuGVP7TjWWlEO4hSJVnOfz0aNmaXYvpQ6Dfc9KKnkG2R26H7zGv4lNpSGvBOah+bXMOtz93Q==
+            Date:
+              schema:
+                type: string
+                example: Mon, 26 Feb 2024 06:36:14 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '459'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                images:
+                  download (3).png:
+                    hash: cff9d4afefd1a53704cb14ae6715e026
+                    height: 219
+                    url: >-
+                      https://scontent-del2-1.xx.fbcdn.net/v/t45.1600-4/427923468_120204862167170358_7770283451758014130_n.png?_nc_cat=111&ccb=1-7&_nc_sid=c0a1f7&_nc_ohc=5IPrhy84aGoAX8jxdKv&_nc_ht=scontent-del2-1.xx&edm=AJNyvH4EAAAA&oh=00_AfBbmEioRaef8QtlNlFaaNorfa4ULQknh5DXoFwPwM1k-w&oe=65E1F20A
+                    name: download (3).png
+                    url_128: >-
+                      https://scontent-del2-1.xx.fbcdn.net/v/t45.1600-4/427923468_120204862167170358_7770283451758014130_n.png?stp=dst-jpg_s168x128&_nc_cat=111&ccb=1-7&_nc_sid=f45b03&_nc_ohc=5IPrhy84aGoAX8jxdKv&_nc_ht=scontent-del2-1.xx&edm=AJNyvH4EAAAA&oh=00_AfCQWLYx490GS8ymzsfBwMadSOJUci8HUcW_gizfnptHqQ&oe=65E1F20A
+                    width: 230
+                    url_256: >-
+                      https://scontent-del2-1.xx.fbcdn.net/v/t45.1600-4/427923468_120204862167170358_7770283451758014130_n.png?stp=dst-jpg&_nc_cat=111&ccb=1-7&_nc_sid=f45b03&_nc_ohc=5IPrhy84aGoAX8jxdKv&_nc_ht=scontent-del2-1.xx&edm=AJNyvH4EAAAA&oh=00_AfC1JOB-X1Xfg1J1TU_dP3tlI1oKaJfF9Ij5LQzz4F_QCA&oe=65E1F20A
+                    url_256_height: '219'
+                    url_256_width: '230'
+  /v19.0/{AD_ACCOUNT_ID}/adcreatives:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: Create Ad Creatives
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Sample Creative
+                object_story_spec:
+                  type: string
+                  example: |-
+                    {
+                           "page_id": "{{PAGE_ID}}",
+                           "link_data": {
+                             "image_hash": "cff9d4afefd1a53704cb14ae6715e026",
+                             "link": "https://facebook.com/{{PAGE_ID}}",
+                             "message": "try it out"
+                           }
+                         }
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+                degrees_of_freedom_spec:
+                  type: string
+                  example: |-
+                    {
+                          "creative_features_spec": {
+                            "standard_enhancements": {
+                              "enroll_status": "OPT_IN"
+                            }
+                          }}
+      parameters:
+        - name: AD_ACCOUNT_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AOlam-NeqkCiS0qxm0cMf3j
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: CCKo4huxquz
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011645346'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  dCfuZlDCFt92WGcg5o8CksVz9O2kBkO7QCo7KDZImwY6sCj6jEeQDBUIV1ixhpkPzSM6RF+Sl4l84zSfuh1BxA==
+            Date:
+              schema:
+                type: string
+                example: Mon, 26 Feb 2024 06:43:11 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '27'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '120204862380410358'
+  /v19.0/{AD_CREATIVE_ID}:
+    get:
+      tags:
+        - 2-Tier ads
+      summary: Get Ad Creative
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: object_story_spec
+        - name: AD_CREATIVE_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            ETag:
+              schema:
+                type: string
+                example: '"d0ec35e283c02cbe6b02cac3cc5f8b32716fef6d"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1542970516481575":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AYPlQgphWIfWLf2KDqocCkb
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: FjQ/y+JGpoI
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1011645751'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  WwfFJ2khah+i1A8i8orBf/rYuqbZkm69wupRxa54aj+A6hmU/X1SXKgLsNsG0eKct4KUs1WaKAzzDQMG3q0zhw==
+            Date:
+              schema:
+                type: string
+                example: Mon, 26 Feb 2024 06:46:35 GMT
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '158'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                object_story_spec:
+                  page_id: '628222690902382'
+                  link_data:
+                    link: https://facebook.com/628222690902382
+                    message: try it out
+                    image_hash: cff9d4afefd1a53704cb14ae6715e026
+                id: '120204862380410358'
+  /v19.0/120211197061250013:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: ADS ACTIVE
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: PAUSED
+                bid_amount:
+                  type: integer
+                  example: '10000'
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/x-www-form-urlencoded
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            EAALXBdIwKjQBO5OFZBFqmLjVt3fDlDFxmgJS2pBKncvLFB942wFHdsJTzBeH9O2dFuzC5aB6kSPM4TlBarq3w4IZAAYWpJVru0ZAwctrohBUza8D7qR1SEyonOvbyOj0KZCfeZCRGWjRXZCwwoQoTjxwK0ZCga38PM5n9Qqw5ZC2IlfV2PxoNdlFkVPCmzgCdZBpP
+        - name: Cookie
+          in: header
+          schema:
+            type: string
+          example: ps_l=1; ps_n=1
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: status%2Cadset_id%2Ccampaign_id
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"1094721371612907":[{"type":"ads_management","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: ACY4EVljtN8ipFYr03QhSVp
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: Cl9VzM61mpC
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1013494159'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  kgRwBieSlKjcz3gX1JsnsO+cVrpyThFbfM7MR9H3OX9TGJkA93v2ele9eX2udabxCdQGLv3F+OFeU9sC8/6sjw==
+            Date:
+              schema:
+                type: string
+                example: Tue, 14 May 2024 16:41:29 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  GOOD; q=0.7, rtt=50, rtx=0, c=10, mss=1380, tbw=1211, tp=-1,
+                  tpl=-1, uplat=1468, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '112'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: ACTIVE
+                adset_id: '120209913931140425'
+                campaign_id: '120209913857470425'
+                id: '120209914266900425'
+  /me/adaccounts:
+    get:
+      tags:
+        - General
+      summary: fetch ads
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            id,name,business,user_tasks,account_status,amount_spent,balance,created_time,currency,is_prepay_account,min_campaign_group_spend_cap,min_daily_budget,timezone_name,age,disable_reason,funding_source,owner
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v19.0/965928961812422:
+    post:
+      tags:
+        - 2-Tier ads
+      summary: child primary page asisign
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                primary_page:
+                  type: integer
+                  example: '257553124108360'
+                access_token:
+                  type: string
+                  example: '{{USER_ACCESS_TOKEN}}'
+                appsecret_proof:
+                  type: string
+                  example: <APP_SECRET_PROOF>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /client/t1/meta-ads/setup-child-business-account:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: setup-child-business-account
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: >-
+                "{\n    \"assistantId\": \"6337cc42be7532606c705fce\",\n   
+                \"pageId\": \"115441321588912\",\n    \"timezoneId\": 1,\n   
+                \"vertical\": \"OTHER\",\n    \"childBusinessName\": \"Stg Child
+                BM\"\n}"
+      parameters:
+        - name: authority
+          in: header
+          schema:
+            type: string
+          example: backend.aisensy.com
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzdjYzQyYmU3NTMyNjA2YzcwNWZjZCIsIm5hbWUiOiJwYXltZW50QGFpc2Vuc3kuY29tIiwicG93ZXIiOjIsImRpc3BsYXlOYW1lIjoiTWF5YW5rIFNpbmdsYSIsImVtYWlsIjoicGF5bWVudEBhaXNlbnN5LmNvbSIsImNvbnRhY3QiOiI5MTkwMTU2ODMwODMiLCJjb21wYW55IjoiTWF5YW5rIFB2dCBMdGQiLCJjbGllbnRJZCI6IjYzMzdjYzQyYmU3NTMyNjA2YzcwNWZjZCIsImFzc2lzdGFudElkIjpudWxsLCJpbWFnZVVybCI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FMbTV3dTMxVC1faDdsMGIwRl95RGp4NHpRbXlFSkl0NnhtS0MyZVF2SHJSPXM5Ni1jIiwiY3VycmVuY3kiOiJJTlIiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEgR01UKzA1OjMwIiwiY29tcGFueVNpemUiOjEwLCJpbmR1c3RyeSI6IkdhbWluZyIsImZpcnN0UHJvamVjdElkIjoiNjMzN2NjNDJiZTc1MzI2MDZjNzA1ZmNlIiwicGFydG5lcklkIjpudWxsLCJjb3VudHJ5IjoiIiwic3RhdGUiOiIiLCJpYXQiOjE3MDkxMzIxNDYsImV4cCI6MTcwOTczNjk0Nn0.FgPNx13p8RvqvB0ifKunbQrulGnSjKrboDwZGwofGmg
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json;charset=UTF-8
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://staging.dj8sl4xl9bxki.amplifyapp.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://staging.dj8sl4xl9bxki.amplifyapp.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: '?0'
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"macOS"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: cross-site
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+          example: >-
+            Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
+            (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '962'
+            ETag:
+              schema:
+                type: string
+                example: W/"3c2-ZxEQLIE5pzKfRMaiZvkB/M+ZJbs"
+            Date:
+              schema:
+                type: string
+                example: Fri, 01 Mar 2024 11:31:10 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                createdChild:
+                  pagePermittedTasks:
+                    - MANAGE
+                    - CREATE_CONTENT
+                    - MODERATE
+                    - MESSAGING
+                    - ADVERTISE
+                    - ANALYZE
+                  isDeleted: false
+                  _id: 65e1bc7bafdc8749cd0d8ab6
+                  assistantId: 6337cc42be7532606c705fce
+                  clientId: 6337cc42be7532606c705fcd
+                  childBusinessName: Stg Child BM
+                  vertical: OTHER
+                  sharedPageId: '115441321588912'
+                  timezoneId: '1'
+                  userAccessToken: >-
+                    EAALXBdIwKjQBO0Kyoj0wQiSdzvThoGlLcWQDAwJ1oRwCkdGVwXzSSI3paxqpocEr0Oc3YefZC74wHmUjGXCZCDLyrar0sp8gCDDx5Ne01wQn95sYc6ZCihXiZBGS5Ko8zUfVMbYWLZBrzHJZCXMJK4YQcxGn7QugclnH3tVcRmKxCuZBdNtbmu5VRjL
+                  childBusinessId: '779309847555016'
+                  systemUserAccessToken: >-
+                    EAALXBdIwKjQBOZCZBZC4N3zI2z25ZCQ1m9ZCvBTFY2KBWlCo2j1FblyZA5nhGibqqTVSKFYhYU7mBl7ZBp76tBVZCZCMZAKZA13a9k9XGZB63KJq2N177XDeHAZAeXrYOPRCVZBt0WBR4xZC6N5QnyZBZAJ5gBB6YIVin7pDmgm9ub09XfmgPo0L7F5j0nwUbrdWFMK97DGUH
+                  fundingSourceId: '7099890873459362'
+                  createdAt: '2024-03-01T11:31:07.140Z'
+                  updatedAt: '2024-03-01T11:31:07.140Z'
+                  __v: 0
+  /client/t1/meta-ads/fetch-child-business-account:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: fetch-child-business-account
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: '"{\n    \"assistantId\": \"6337cc42be7532606c705fce\"}"'
+      parameters:
+        - name: authority
+          in: header
+          schema:
+            type: string
+          example: backend.aisensy.com
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzdjYzQyYmU3NTMyNjA2YzcwNWZjZCIsIm5hbWUiOiJwYXltZW50QGFpc2Vuc3kuY29tIiwicG93ZXIiOjIsImRpc3BsYXlOYW1lIjoiTWF5YW5rIFNpbmdsYSIsImVtYWlsIjoicGF5bWVudEBhaXNlbnN5LmNvbSIsImNvbnRhY3QiOiI5MTkwMTU2ODMwODMiLCJjb21wYW55IjoiTWF5YW5rIFB2dCBMdGQiLCJjbGllbnRJZCI6IjYzMzdjYzQyYmU3NTMyNjA2YzcwNWZjZCIsImFzc2lzdGFudElkIjpudWxsLCJpbWFnZVVybCI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FMbTV3dTMxVC1faDdsMGIwRl95RGp4NHpRbXlFSkl0NnhtS0MyZVF2SHJSPXM5Ni1jIiwiY3VycmVuY3kiOiJJTlIiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEgR01UKzA1OjMwIiwiY29tcGFueVNpemUiOjEwLCJpbmR1c3RyeSI6IkdhbWluZyIsImZpcnN0UHJvamVjdElkIjoiNjMzN2NjNDJiZTc1MzI2MDZjNzA1ZmNlIiwicGFydG5lcklkIjpudWxsLCJjb3VudHJ5IjoiIiwic3RhdGUiOiIiLCJpYXQiOjE3MDkxMzIxNDYsImV4cCI6MTcwOTczNjk0Nn0.FgPNx13p8RvqvB0ifKunbQrulGnSjKrboDwZGwofGmg
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json;charset=UTF-8
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://staging.dj8sl4xl9bxki.amplifyapp.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://staging.dj8sl4xl9bxki.amplifyapp.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: '?0'
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"macOS"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: cross-site
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+          example: >-
+            Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
+            (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '997'
+            ETag:
+              schema:
+                type: string
+                example: W/"3e5-G9+BUBsg5KDOGQdkEomurp/g138"
+            Date:
+              schema:
+                type: string
+                example: Fri, 01 Mar 2024 12:43:00 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                fetchedChildBM:
+                  - pagePermittedTasks:
+                      - MANAGE
+                      - CREATE_CONTENT
+                      - MODERATE
+                      - MESSAGING
+                      - ADVERTISE
+                      - ANALYZE
+                    isDeleted: false
+                    _id: 65e1c4dea0a54aa323a233f2
+                    assistantId: 6337cc42be7532606c705fce
+                    clientId: 6337cc42be7532606c705fcd
+                    childBusinessName: Stg Child BM1
+                    vertical: OTHER
+                    sharedPageId: '115441321588912'
+                    timezoneId: '1'
+                    userAccessToken: >-
+                      EAALXBdIwKjQBO0Kyoj0wQiSdzvThoGlLcWQDAwJ1oRwCkdGVwXzSSI3paxqpocEr0Oc3YefZC74wHmUjGXCZCDLyrar0sp8gCDDx5Ne01wQn95sYc6ZCihXiZBGS5Ko8zUfVMbYWLZBrzHJZCXMJK4YQcxGn7QugclnH3tVcRmKxCuZBdNtbmu5VRjL
+                    childBusinessId: '3537092153195768'
+                    systemUserAccessToken: >-
+                      EAALXBdIwKjQBO2Gw6DHV1wT1O0G7ixa3vnR3CVxxoXOQJbqIRm77XAxaZCZC4cUWdCoc67bMqTXbvEW4TBaxtTM5wRGpSyZBCUELSXZBRECiF0f2SuFQdS3Xj2OWWwK9MPNzY9AfPrDXh2fV3I9j9ld6VvZCGs724JNAgv5ojYAKkZBwjZCiZCZBYOumRrUAZANwen
+                    systemUserId: '122097726686232948'
+                    fundingSourceId: '7236274103153618'
+                    createdAt: '2024-03-01T12:06:54.109Z'
+                    updatedAt: '2024-03-01T12:06:54.109Z'
+                    __v: 0
+  /client/t1/meta-ads/create-ad-account:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: create-ad-account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                assistantId: 6337cc42be7532606c705fce
+                clientId: ''
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '9973'
+            ETag:
+              schema:
+                type: string
+                example: W/"26f5-DshZyRHsvXc2MJ8W0OQpyBzrnIc"
+            Date:
+              schema:
+                type: string
+                example: Sat, 02 Mar 2024 06:04:46 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - _id: 65e083fe56b469ded7599180
+                  accountId: act_2054053918110202
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2022-08-02T07:31:46.000Z'
+                  accountName: Swapnil Shukla
+                  accountStatus: UNSETTLED
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T13:17:50.949Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: false
+                  isPrepayAccount: false
+                  metaBusinessId: null
+                  metaBusinessName: Other Ad Accounts
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '257715267030830'
+                  status: active
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e083fe56b469ded7599181
+                  accountId: act_1390255591873649
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2023-05-23T13:43:22.000Z'
+                  accountName: singla – Ad account
+                  accountStatus: ACTIVE
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T13:17:50.949Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: true
+                  isPrepayAccount: false
+                  metaBusinessId: '4880872795345906'
+                  metaBusinessName: AiSensy Dev
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '4880872795345906'
+                  status: active
+                  systemUserId: '102775309366152'
+                  tasks: null
+                  timezone: Etc/GMT+5
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                  clicks: '0'
+                  impressions: '0'
+                  reach: '0'
+                  spend: '0.00'
+                  uniqueClicks: '0'
+                - _id: 65e0951656b469ded75ca524
+                  accountId: act_4050729644952254
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '1279'
+                  accountCreatedAt: '2020-05-03T12:29:35.000Z'
+                  accountName: '4050729644952254'
+                  accountStatus: ACTIVE
+                  amountSpent: '315574312'
+                  balance: '76184'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource:
+                    id: '4534006383378527'
+                  isAssigned: true
+                  isPrepayAccount: true
+                  metaBusinessId: '137401538048371'
+                  metaBusinessName: Aspire Fintech
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '137401538048371'
+                  status: active
+                  systemUserId: '122122457816089653'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca525
+                  accountId: act_280903233330361
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '1329'
+                  accountCreatedAt: '2020-07-09T11:29:29.000Z'
+                  accountName: '280903233330361'
+                  accountStatus: UNSETTLED
+                  amountSpent: '780995'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: true
+                  isPrepayAccount: false
+                  metaBusinessId: '137401538048371'
+                  metaBusinessName: Aspire Fintech
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '137401538048371'
+                  status: active
+                  systemUserId: '122122457816089653'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Calcutta
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca526
+                  accountId: act_2896628917228544
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '1150'
+                  accountCreatedAt: '2021-01-04T12:39:14.000Z'
+                  accountName: techtip
+                  accountStatus: ACTIVE
+                  amountSpent: '150000'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource:
+                    id: '3593100237472057'
+                  isAssigned: true
+                  isPrepayAccount: true
+                  metaBusinessId: '693873051495509'
+                  metaBusinessName: TechTip24
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '693873051495509'
+                  status: active
+                  systemUserId: '122107453814117175'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Calcutta
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca527
+                  accountId: act_1290756564818634
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '418'
+                  accountCreatedAt: '2022-12-31T20:10:14.000Z'
+                  accountName: TechTip24
+                  accountStatus: ACTIVE
+                  amountSpent: '1133478'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource:
+                    id: '6288419741270310'
+                  isAssigned: true
+                  isPrepayAccount: false
+                  metaBusinessId: '693873051495509'
+                  metaBusinessName: TechTip24
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '693873051495509'
+                  status: active
+                  systemUserId: '122107453814117175'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca528
+                  accountId: act_206673958908297
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2023-05-24T10:42:09.000Z'
+                  accountName: Dignity Wealth For You Aisensy
+                  accountStatus: CLOSED
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource:
+                    id: '6036643113115268'
+                  isAssigned: true
+                  isPrepayAccount: true
+                  metaBusinessId: '100409526153656'
+                  metaBusinessName: Dignity Wealth for you
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '100409526153656'
+                  status: active
+                  systemUserId: '103474105996323'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca529
+                  accountId: act_912376543742977
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2023-11-24T07:07:24.000Z'
+                  accountName: test
+                  accountStatus: ACTIVE
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: true
+                  isPrepayAccount: false
+                  metaBusinessId: '137401538048371'
+                  metaBusinessName: Aspire Fintech
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '137401538048371'
+                  status: active
+                  systemUserId: '122122457816089653'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca52a
+                  accountId: act_862037745402005
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2023-12-02T10:16:43.000Z'
+                  accountName: AiSensyTest
+                  accountStatus: ACTIVE
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: false
+                  isPrepayAccount: false
+                  metaBusinessId: '1215672488927258'
+                  metaBusinessName: AiSensy
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '1215672488927258'
+                  status: active
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca52b
+                  accountId: act_749466609974602
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2024-01-10T07:14:05.000Z'
+                  accountName: Swapnil's
+                  accountStatus: ACTIVE
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: true
+                  isPrepayAccount: false
+                  metaBusinessId: '2159298924419052'
+                  metaBusinessName: Swapnil
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '2159298924419052'
+                  status: active
+                  systemUserId: '122094266714188763'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e0951656b469ded75ca52c
+                  accountId: act_3320524838245085
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '0'
+                  accountCreatedAt: '2024-01-09T10:26:46.000Z'
+                  accountName: Swapnil
+                  accountStatus: ACTIVE
+                  amountSpent: '0'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource: {}
+                  isAssigned: true
+                  isPrepayAccount: false
+                  metaBusinessId: '770476050956179'
+                  metaBusinessName: Swapnil Business
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '770476050956179'
+                  status: active
+                  systemUserId: '122099520032151183'
+                  tasks:
+                    - DRAFT
+                    - ANALYZE
+                    - ADVERTISE
+                    - MANAGE
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:54:23.209Z'
+                  clicks: '0'
+                  impressions: '0'
+                  reach: '0'
+                  spend: '0.00'
+                  uniqueClicks: '0'
+                - _id: 65e0951656b469ded75ca52d
+                  accountId: act_825194261959059
+                  assistantId: 6337cc42be7532606c705fce
+                  accountAge: '278'
+                  accountCreatedAt: '2022-09-17T10:38:22.000Z'
+                  accountName: '825194261959059'
+                  accountStatus: ACTIVE
+                  amountSpent: '57519'
+                  balance: '0'
+                  clientId: 6337cc42be7532606c705fcd
+                  createdAt: '2024-02-29T14:30:46.176Z'
+                  currency: INR
+                  disableReason: NONE
+                  fundingSource:
+                    id: '5817539495029255'
+                  isAssigned: true
+                  isPrepayAccount: true
+                  metaBusinessId: '100409526153656'
+                  metaBusinessName: Dignity Wealth for you
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  owner: '100409526153656'
+                  status: active
+                  systemUserId: '103474105996323'
+                  tasks: null
+                  timezone: Asia/Kolkata
+                  updatedAt: '2024-02-29T14:30:46.176Z'
+                - _id: 65e1e9ab3248f781b30ece06
+                  tasks: []
+                  impressions: '0'
+                  spend: '0'
+                  clicks: '0'
+                  reach: '0'
+                  uniqueClicks: '0'
+                  messageSentCount: 0
+                  totalLeadsGenerated: 0
+                  newLeadsGenerated: 0
+                  clientId: 6337cc42be7532606c705fcd
+                  assistantId: 6337cc42be7532606c705fce
+                  metaBusinessId: '1377963976199571'
+                  metaBusinessName: Stg Child BM1
+                  accountId: act_316885311379692
+                  accountName: My Ad account 2
+                  accountStatus: ACTIVE
+                  amountSpent: '0'
+                  balance: '0'
+                  currency: INR
+                  isPrepayAccount: false
+                  minAdSpend: '500000'
+                  minDailyBudget: 8331
+                  fundingSource: '7182541048529830'
+                  disableReason: NONE
+                  accountAge: '0'
+                  isAssigned: false
+                  status: active
+                  owner: '1377963976199571'
+                  timezone: America/Los_Angeles
+                  accountCreatedAt: '2024-03-01T14:43:55.562Z'
+                  createdAt: '2024-03-01T14:43:55.569Z'
+                  updatedAt: '2024-03-01T14:43:55.569Z'
+                  __v: 0
+  /client/t1/meta-ads/create-meta-ad-campaign:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: create-ad-campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Campaign Test 2
+                objective: OUTCOME_AWARENESS
+                status: PAUSED
+                specialAdCategories:
+                  - EMPLOYMENT
+                adAccountId: act_316885311379692
+                assistantId: 6337cc42be7532606c705fce
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '401'
+            ETag:
+              schema:
+                type: string
+                example: W/"191-CP8xJAwK99551aowCvVfEo3Ftqc"
+            Date:
+              schema:
+                type: string
+                example: Sat, 02 Mar 2024 09:40:38 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                specialAdCategories:
+                  - EMPLOYMENT
+                isDeleted: false
+                _id: 65e2f416acbd17c1b1c0bb77
+                assistantId: 6337cc42be7532606c705fce
+                clientId: 6337cc42be7532606c705fcd
+                name: Campaign Test 2
+                objective: OUTCOME_AWARENESS
+                status: PAUSED
+                adCampaignId: '120206997861650589'
+                adAccountId: act_316885311379692
+                createdAt: '2024-03-02T09:40:38.880Z'
+                updatedAt: '2024-03-02T09:40:38.880Z'
+                __v: 0
+  /client/t1/meta-ads/fetch-meta-ad-campaign:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: fetch-meta-ad-campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                adAccountId: act_316885311379692
+                assistantId: 6337cc42be7532606c705fce
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '834'
+            ETag:
+              schema:
+                type: string
+                example: W/"342-IAiaQrz1bfXAYn8lbU2w5S3Acrc"
+            Date:
+              schema:
+                type: string
+                example: Sat, 02 Mar 2024 10:34:48 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                campaigns:
+                  - specialAdCategories:
+                      - EMPLOYMENT
+                    isDeleted: false
+                    _id: 65e2f416acbd17c1b1c0bb77
+                    assistantId: 6337cc42be7532606c705fce
+                    clientId: 6337cc42be7532606c705fcd
+                    name: Campaign Test 2
+                    objective: OUTCOME_AWARENESS
+                    status: PAUSED
+                    adCampaignId: '120206997861650589'
+                    adAccountId: act_316885311379692
+                    createdAt: '2024-03-02T09:40:38.880Z'
+                    updatedAt: '2024-03-02T09:40:38.880Z'
+                    __v: 0
+                  - specialAdCategories:
+                      - EMPLOYMENT
+                    isDeleted: false
+                    _id: 65e2f45325724b08f6f7d2f6
+                    assistantId: 6337cc42be7532606c705fce
+                    clientId: 6337cc42be7532606c705fcd
+                    name: Campaign Test 1
+                    objective: OUTCOME_AWARENESS
+                    status: PAUSED
+                    adCampaignId: '120206997071950589'
+                    adAccountId: act_316885311379692
+                    createdAt: '2024-03-02T09:40:38.880Z'
+                    updatedAt: '2024-03-02T09:40:38.880Z'
+                    __v: 0
+  /client/t1/meta-ads/fetch-meta-ad-set:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: fetch-meta-ad-set
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                adCampaignId: '120206997861650589'
+                assistantId: 6337cc42be7532606c705fce
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '590'
+            ETag:
+              schema:
+                type: string
+                example: W/"24e-G1mgbXarj2x0B/gb3dSAlqN4nvY"
+            Date:
+              schema:
+                type: string
+                example: Sat, 02 Mar 2024 11:11:03 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                adSet:
+                  - bidAmount:
+                      - 840
+                    isDeleted: false
+                    _id: 65e3093db4d4cc2186bc33a2
+                    assistantId: 6337cc42be7532606c705fce
+                    clientId: 6337cc42be7532606c705fcd
+                    name: My Ad Set
+                    optimizationGoal: REACH
+                    billingEvent: IMPRESSIONS
+                    dailyBudget: '10000'
+                    adCampaignId: '120206997861650589'
+                    targeting:
+                      geo_locations:
+                        countries:
+                          - IN
+                      interests:
+                        - id: 6003139266461
+                          name: Movies
+                    startTime: '2024-10-06T04:45:17.000Z'
+                    status: PAUSED
+                    adAccountId: act_316885311379692
+                    createdAt: '2024-03-02T11:10:53.228Z'
+                    updatedAt: '2024-03-02T11:10:53.228Z'
+                    __v: 0
+  /client/t1/meta-ads/create-meta-ad-set:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: create-meta-ad-set
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: My Ad Set
+                optimizationGoal: REACH
+                billingEvent: IMPRESSIONS
+                bidAmount: '840'
+                dailyBudget: '10000'
+                adCampaignId: '120206997861650589'
+                targeting:
+                  geo_locations:
+                    countries:
+                      - IN
+                  interests:
+                    - id: 6003139266461
+                      name: Movies
+                startTime: 2024-10-06T04:45:17+0000
+                status: PAUSED
+                assistantId: 6337cc42be7532606c705fce
+                adAccountId: act_316885311379692
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: >-
+                  default-src 'self';base-uri
+                  'self';block-all-mixed-content;font-src 'self' https:
+                  data:;frame-ancestors 'self';img-src 'self' data:;object-src
+                  'none';script-src 'self';script-src-attr 'none';style-src
+                  'self' https: 'unsafe-inline';upgrade-insecure-requests
+            X-DNS-Prefetch-Control:
+              schema:
+                type: string
+                example: 'off'
+            Expect-CT:
+              schema:
+                type: string
+                example: max-age=0
+            X-Frame-Options:
+              schema:
+                type: string
+                example: SAMEORIGIN
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; includeSubDomains
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            X-XSS-Protection:
+              schema:
+                type: integer
+                example: '0'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '588'
+            ETag:
+              schema:
+                type: string
+                example: W/"24c-cjA+cTfCXfKZEDzxJFKbsbPTJ5w"
+            Date:
+              schema:
+                type: string
+                example: Sat, 02 Mar 2024 11:10:53 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                adSet:
+                  bidAmount:
+                    - 840
+                  isDeleted: false
+                  _id: 65e3093db4d4cc2186bc33a2
+                  assistantId: 6337cc42be7532606c705fce
+                  clientId: 6337cc42be7532606c705fcd
+                  name: My Ad Set
+                  optimizationGoal: REACH
+                  billingEvent: IMPRESSIONS
+                  dailyBudget: '10000'
+                  adCampaignId: '120206997861650589'
+                  targeting:
+                    geo_locations:
+                      countries:
+                        - IN
+                    interests:
+                      - id: 6003139266461
+                        name: Movies
+                  startTime: '2024-10-06T04:45:17.000Z'
+                  status: PAUSED
+                  adAccountId: act_316885311379692
+                  createdAt: '2024-03-02T11:10:53.228Z'
+                  updatedAt: '2024-03-02T11:10:53.228Z'
+                  __v: 0
+  /client/t1/meta-ads/create-meta-ad-creative:
+    post:
+      tags:
+        - 'AISensy two tier '
+      summary: create-ad
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Ad Creative
+                fileUrl: >-
+                  https://whatsapp-media-library-stg.s3.ap-south-1.amazonaws.com/IMAGE/6337cc42be7532606c705fce/5733809_profilepicture1702647833463
+                assistantId: 6337cc42be7532606c705fce
+                adAccountId: act_316885311379692
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v19.0/{PARENT_BM_ID}/managed_businesses:
+    post:
+      tags:
+        - On Behalf of
+      summary: Managed Businesses
+      requestBody:
+        content: {}
+      parameters:
+        - name: existing_client_business_id
+          in: query
+          schema:
+            type: integer
+          example: '895024188296658'
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBOZBH4VarykmltJSOZCCqFjOZCwvGSc7TAy2SE3581CZCEdQPZAVbbm5xohtGZBW3BK2On0yTCM65nfrZCEAhtDosC8ZB5qMZA6wgyy5zuYSUmYmmavdeg7PiPJnrTTb4o4awsAvZA6jLZBhB1KnDkSKgx31rGVibpRtzttdoSRSJfZCaKJiK
+        - name: PARENT_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":1,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AP0Ntq5IBYg0ITN9CE6WOyz
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: ENhZTdKFHx9
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1012055050'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  8my1LyuxIhREAxYyIDf9hgtOJ5r9/+GcElq3BtJftVRYOis0dXSjWRy506wc08KG7jjxl4sI8+pey+ey326nCA==
+            Date:
+              schema:
+                type: string
+                example: Thu, 14 Mar 2024 16:14:15 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  EXCELLENT; q=0.9, rtt=30, rtx=0, c=10, mss=1288, tbw=2755,
+                  tp=-1, tpl=-1, uplat=339, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '24'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: '895024188296658'
+  /v19.0/895024188296658/access_token:
+    post:
+      tags:
+        - On Behalf of
+      summary: Access Token
+      requestBody:
+        content: {}
+      parameters:
+        - name: scope
+          in: query
+          schema:
+            type: string
+          example: ads_management,pages_read_engagement
+        - name: app_id
+          in: query
+          schema:
+            type: string
+          example: '{{App_ID}}'
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{PARENT_SYSTEM_USER_TOKEN}}'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":1,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AuOcH9Wf-QqhIgdXQu3MaHp
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: Fs3QI3zLTW5
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1012055050'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  sVjnQkQqownido46A7VOsmpqDVSH/v3NjrZkP+NHGYAjNW1y0MpyLWm8fvCic3L73vSi+Oibg3IrOV6fgrk8gw==
+            Date:
+              schema:
+                type: string
+                example: Thu, 14 Mar 2024 16:15:46 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  EXCELLENT; q=0.9, rtt=30, rtx=0, c=10, mss=1288, tbw=3657,
+                  tp=-1, tpl=-1, uplat=863, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: close
+            Content-Length:
+              schema:
+                type: integer
+                example: '222'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                access_token: >-
+                  EAALXBdIwKjQBO1OTCu3oZAAc46PvYm6ZBJpL1qgeUDGTyztbEZBEnZCPhLLpY0zpZB4e37ZA22loRUcZCnJZAX5CaBHVaWsmUZCxp4bN0y2zfZCodZAgLmsL4s7VGjIwNMORvZCsunkwVPCbpild0mAqKkdPtThOD7SUvGwwJQG8VtFDIBubHVwK7SLOmubZB6u0ZB0ywA
+  /v19.0/me:
+    get:
+      tags:
+        - On Behalf of
+      summary: System User Get
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBO1OTCu3oZAAc46PvYm6ZBJpL1qgeUDGTyztbEZBEnZCPhLLpY0zpZB4e37ZA22loRUcZCnJZAX5CaBHVaWsmUZCxp4bN0y2zfZCodZAgLmsL4s7VGjIwNMORvZCsunkwVPCbpild0mAqKkdPtThOD7SUvGwwJQG8VtFDIBubHVwK7SLOmubZB6u0ZB0ywA
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: '"02f7eedf5bafee2f093ea5eafcc9a8a4b1cae13e"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":1,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: A2qyolnIJUr79z5Zsdojap_
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: Fb3zZ0B7UGq
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1012055050'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  xmEahSNGKDnCViF43OIo9uIX4CKrB53kvTKiVl3l8BZTPuK9B++pHgnsfj/ffckU/HcwQ/Y5M63Pj3vEhpGO1w==
+            Date:
+              schema:
+                type: string
+                example: Thu, 14 Mar 2024 16:17:10 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  EXCELLENT; q=0.9, rtt=28, rtx=0, c=10, mss=1288, tbw=4249,
+                  tp=-1, tpl=-1, uplat=269, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '56'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                name: AiSensy System User
+                id: '122154061388074509'
+  /v19.0/272388359282585/assigned_users:
+    post:
+      tags:
+        - On Behalf of
+      summary: Assigned Users
+      requestBody:
+        content: {}
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: integer
+          example: '122154061388074509'
+        - name: tasks
+          in: query
+          schema:
+            type: string
+          example: MANAGE
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBOZBH4VarykmltJSOZCCqFjOZCwvGSc7TAy2SE3581CZCEdQPZAVbbm5xohtGZBW3BK2On0yTCM65nfrZCEAhtDosC8ZB5qMZA6wgyy5zuYSUmYmmavdeg7PiPJnrTTb4o4awsAvZA6jLZBhB1KnDkSKgx31rGVibpRtzttdoSRSJfZCaKJiK
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":1,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: ARt7V98CjM7URlrRD9_9xof
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: BK4qWouAYl2
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1012055050'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  c/yb/qU0POUc2YON0sqx1DOLLjkzviwadikTWlUoCx54K3s6dNxBvCYyjj73kf+x9B9J1U+T4yjHDU2ifA9qEQ==
+            Date:
+              schema:
+                type: string
+                example: Thu, 14 Mar 2024 16:19:34 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  EXCELLENT; q=0.9, rtt=30, rtx=0, c=10, mss=1288, tbw=12979,
+                  tp=-1, tpl=-1, uplat=784, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: close
+            Content-Length:
+              schema:
+                type: integer
+                example: '16'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /v19.0/me/accounts:
+    get:
+      tags:
+        - On Behalf of
+      summary: Fetch Accounts
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBO1OTCu3oZAAc46PvYm6ZBJpL1qgeUDGTyztbEZBEnZCPhLLpY0zpZB4e37ZA22loRUcZCnJZAX5CaBHVaWsmUZCxp4bN0y2zfZCodZAgLmsL4s7VGjIwNMORvZCsunkwVPCbpild0mAqKkdPtThOD7SUvGwwJQG8VtFDIBubHVwK7SLOmubZB6u0ZB0ywA
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Encoding:
+              schema:
+                type: string
+                example: br
+            ETag:
+              schema:
+                type: string
+                example: '"2c5d4b40e4497a91ef3e5d8a5e35082e68a400db"'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":1,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v19.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AVxDz1yeMFQLTJ48Skvp7St
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: FPPHb4fjVQ9
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1012055050'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  XpHqbwXPPv6hFE/CzDIEWMGH9Az0hiQ79Cu30e2uLO4Y61wsyr3zvNy6dcs9bvTAkr4eynwlQ6bDCF8WPyDq+w==
+            Date:
+              schema:
+                type: string
+                example: Thu, 14 Mar 2024 16:20:38 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  EXCELLENT; q=0.9, rtt=31, rtx=0, c=10, mss=1288, tbw=4249,
+                  tp=-1, tpl=-1, uplat=471, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '860'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - access_token: >-
+                      EAALXBdIwKjQBO7SOqGqM8zP0lOMyfvrPYbZCGjC2Hn6pBljRZCdm54bMd2TrFsAC9CmsQrtulhWyZCjTiRSxMEDLBoXts2B01y5JZBlOrfM4f8MAsSNtIB0xcbsUUhe9XHqmYsNETEi7WVjZB6Yog2FTlWgRQl9l5s3BZB1KyJZBxASiKrDfQUNUbRVAChySCrDhQCTsyAZD
+                    category: Real Estate
+                    category_list:
+                      - id: '198327773511962'
+                        name: Real Estate
+                      - id: '273819889375819'
+                        name: Restaurant
+                      - id: '183013211744255'
+                        name: Recreation Center
+                    name: Test Page
+                    id: '257553124108360'
+                    tasks:
+                      - ADVERTISE
+                      - ANALYZE
+                      - CREATE_CONTENT
+                      - MESSAGING
+                      - MODERATE
+                      - MANAGE
+                  - access_token: >-
+                      EAALXBdIwKjQBO46CUq3SR4uZBYFlGRmfjVaWEnZCSa4ghOH9JqMTSztcJvcHYG2E3kMEDOfKkXxwaUV4sipxwk1WQXgcXdboOcUtUtPZAhaWhkvZCWIHhZCGRhi550o9z6ZAZAaJfZBEgvcfdW4yNZB9JC8PGSO4aQeZB5bQkkcZAYRumdYqcXDJDJ0tIRiFMptMDHIgF4NEhIZD
+                    category: Agriculture
+                    category_list:
+                      - id: '1574325646194878'
+                        name: Agriculture
+                    name: Prod Doc
+                    id: '272388359282585'
+                    tasks:
+                      - ADVERTISE
+                      - ANALYZE
+                      - CREATE_CONTENT
+                      - MESSAGING
+                      - MODERATE
+                      - MANAGE
+                paging:
+                  cursors:
+                    before: >-
+                      QVFIUlIxTUtqUWlHWndwNGtKajZA6bDVnTWhzR3ZAnSGZA5ZAFZATdm9aVFh1M2QxeUdmSHFBOXB4UEp5NWNkWmV5TVgyZAFB3STVjTHl0ZAjNvaThnTW5QOFF0ek9B
+                    after: >-
+                      QVFIUkcxX2NES0xHNWxRdUlwVGxObkdRVmZAFcFdnTGZAid0duel9lQXdZAZA2ZAhUDVVNzRSdkd2QW1URnI2ekcyQ1p1WHpGa2dBRFBJWWlQZAjVVd2REMXFnY1VB
+  /v20.0/act_893853609221449/customaudiencestos:
+    post:
+      tags:
+        - Look alike audience
+      summary: Terms condition accepting api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                tos_id: custom_audience_tos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer
+            EAALXBdIwKjQBO9e5v0ZCD13NZCxNKw69xVlgirfnv3XBCU2yFhoZCOVTAbfUoI5UDibPDxLq4moLuRgh7TEPEG3TftjPas382Tg4iDq6Ok7AZBSpMNcZAF8jzaoLbFFwiMk5eZA5iXswhZBgsWPepVaO1NlLuOaHVQZCmSEIN5oxoOiRbb8ILdMaaIedMHXPWfym
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-business-use-case-usage:
+              schema:
+                type: string
+                example: >-
+                  {"893853609221449":[{"type":"custom_audience","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0,"ads_api_access_tier":"standard_access"}]}
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v20.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: ADe-Ht5N6fa6n6uLN_-cx6e
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: FJyrEz1TAKx
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1016909378'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  ZrFRhJbaM2L49tlXPtRaNY+lnlld0C+3atH0QCPnv9C7OA4gZbe7QHWPGInov8lMw8HAhxJTjkogfPzfgFR2vA==
+            Date:
+              schema:
+                type: string
+                example: Mon, 30 Sep 2024 10:17:59 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '16'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /v20.0/act_893853609221449/customaudiences:
+    post:
+      tags:
+        - Look alike audience
+      summary: Create lookalike audience
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My lookalike audience
+                subtype:
+                  type: string
+                  example: LOOKALIKE
+                origin_audience_id:
+                  type: integer
+                  example: '120211602226510037'
+                lookalike_spec:
+                  type: string
+                  example: '{"type":"similarity","country":"IN"}'
+                access_token:
+                  type: string
+                  example: >-
+                    EAALXBdIwKjQBO9e5v0ZCD13NZCxNKw69xVlgirfnv3XBCU2yFhoZCOVTAbfUoI5UDibPDxLq4moLuRgh7TEPEG3TftjPas382Tg4iDq6Ok7AZBSpMNcZAF8jzaoLbFFwiMk5eZA5iXswhZBgsWPepVaO1NlLuOaHVQZCmSEIN5oxoOiRbb8ILdMaaIedMHXPWfym
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v20.0/120211602226510037/users:
+    post:
+      tags:
+        - Look alike audience
+      summary: Specify a List of Users
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                payload:
+                  type: string
+                  example: >-
+                    {
+                           "schema": [
+                             "EMAIL"
+                           ],
+                           "data": [
+                             [
+                    "15E8086A82E0C991B37B00E0F80FA334C1DCBCCFBE3ACAC7C1E3E9E06D758FC3"
+                             ]
+                           ]
+                         }
+                access_token:
+                  type: string
+                  example: >-
+                    EAALXBdIwKjQBO9e5v0ZCD13NZCxNKw69xVlgirfnv3XBCU2yFhoZCOVTAbfUoI5UDibPDxLq4moLuRgh7TEPEG3TftjPas382Tg4iDq6Ok7AZBSpMNcZAF8jzaoLbFFwiMk5eZA5iXswhZBgsWPepVaO1NlLuOaHVQZCmSEIN5oxoOiRbb8ILdMaaIedMHXPWfym
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=UTF-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            x-ad-account-usage:
+              schema:
+                type: string
+                example: >-
+                  {"acc_id_util_pct":0,"reset_time_duration":0,"ads_api_access_tier":"standard_access"}
+            cross-origin-resource-policy:
+              schema:
+                type: string
+                example: cross-origin
+            x-app-usage:
+              schema:
+                type: string
+                example: '{"call_count":5,"total_cputime":0,"total_time":0}'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            facebook-api-version:
+              schema:
+                type: string
+                example: v20.0
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=15552000; preload
+            Pragma:
+              schema:
+                type: string
+                example: no-cache
+            Cache-Control:
+              schema:
+                type: string
+                example: private, no-cache, no-store, must-revalidate
+            Expires:
+              schema:
+                type: string
+                example: Sat, 01 Jan 2000 00:00:00 GMT
+            x-fb-request-id:
+              schema:
+                type: string
+                example: AZiw4McHEIj3KV6GWIH9oBD
+            x-fb-trace-id:
+              schema:
+                type: string
+                example: DsDFxR+uuSA
+            x-fb-rev:
+              schema:
+                type: integer
+                example: '1016909378'
+            X-FB-Debug:
+              schema:
+                type: string
+                example: >-
+                  pg1QQ8N7dlXfVpOAK3dc7gePTxaZZnPXSGYlfa2y/zf3nYPmS53BMlm9g3lF7BY2SKE6S/X28cYb0bCIP8/VoQ==
+            Date:
+              schema:
+                type: string
+                example: Mon, 30 Sep 2024 10:47:39 GMT
+            X-FB-Connection-Quality:
+              schema:
+                type: string
+                example: >-
+                  EXCELLENT; q=0.9, rtt=30, rtx=0, c=10, mss=1380, tbw=3402,
+                  tp=-1, tpl=-1, uplat=573, ullat=0
+            Alt-Svc:
+              schema:
+                type: string
+                example: h3=":443"; ma=86400
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: integer
+                example: '139'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                audience_id: '120211602226510037'
+                session_id: '3215540825309300148'
+                num_received: 1
+                num_invalid_entries: 0
+                invalid_entry_samples: {}
+  /v15.0/me/businesses:
+    get:
+      tags:
+        - General
+      summary: fetch business
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '100'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /me/accounts:
+    get:
+      tags:
+        - General
+      summary: fetch accounts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            access_token,has_whatsapp_business_number,has_whatsapp_number,whatsapp_number,name,id,tasks,business,is_published,picture,messenger_ads_default_page_welcome_message{page_welcome_message_type,page_welcome_message_body},messenger_ads_default_icebreakers,category,connected_instagram_account
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /2159298924419052/owned_pages:
+    get:
+      tags:
+        - General
+      summary: fetch owned pages
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            access_token,has_whatsapp_business_number,has_whatsapp_number,whatsapp_number,name,id,tasks,business,is_published,picture,messenger_ads_default_page_welcome_message{page_welcome_message_type,page_welcome_message_body},messenger_ads_default_icebreakers,category,connected_instagram_account
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /2159298924419052/owned_ad_accounts:
+    get:
+      tags:
+        - General
+      summary: fetch owned ad account
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            access_token,has_whatsapp_business_number,has_whatsapp_number,whatsapp_number,name,id,tasks,business,is_published,picture,messenger_ads_default_page_welcome_message{page_welcome_message_type,page_welcome_message_body},messenger_ads_default_icebreakers,category,connected_instagram_account
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /owned_pages:
+    get:
+      tags:
+        - General
+      summary: Assigned Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            access_token,has_whatsapp_business_number,has_whatsapp_number,whatsapp_number,name,id,tasks,business,is_published,picture,messenger_ads_default_page_welcome_message{page_welcome_message_type,page_welcome_message_body},messenger_ads_default_icebreakers,category,connected_instagram_account
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /{metaBusinessId}]/owned_pages:
+    get:
+      tags:
+        - General
+      summary: assign-ad-account
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: >-
+            access_token,has_whatsapp_business_number,has_whatsapp_number,whatsapp_number,name,id,tasks,business,is_published,picture,messenger_ads_default_page_welcome_message{page_welcome_message_type,page_welcome_message_body},messenger_ads_default_icebreakers,category,connected_instagram_account
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+        - name: metaBusinessId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v19.0/{CHILD_BM_ID}/adaccount:
+    post:
+      tags:
+        - General
+      summary: create-ad-account
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: MyAdAccount
+                currency:
+                  type: string
+                  example: USD
+                timezone_id:
+                  type: integer
+                  example: '1'
+                end_advertiser:
+                  type: string
+                  example: '{{PAGE_ID}}'
+                media_agency:
+                  type: string
+                  example: UNFOUND
+                partner:
+                  type: string
+                  example: NONE
+                access_token:
+                  type: string
+                  example: '{{CHILD_SYSTEM_USER_TOKEN}}'
+      parameters:
+        - name: CHILD_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v19.0//ads:
+    post:
+      tags:
+        - General
+      summary: create-ad
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: ACTIVE
+                name:
+                  type: string
+                  example: Test
+                adset_id:
+                  type: string
+                  example: <id>
+                creative:
+                  type: string
+                  example: |2-
+
+                        "object_story_spec": {
+                            ...
+                        },
+                        "authorization_category": "POLITICAL"
+                    }
+                access_token:
+                  type: string
+                  example: <TOKEN>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /{PARENT_BM_ID}/managed_businesses:
+    post:
+      tags:
+        - General
+      summary: managed_businesses
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: existing_client_business_id
+          in: query
+          schema:
+            type: integer
+          example: '2134876363531277'
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: '{{USER_ACCESS_TOKEN}}'
+        - name: PARENT_BM_ID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /2159298924419052/access_token:
+    post:
+      tags:
+        - General
+      summary: Assign page
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scope
+          in: query
+          schema:
+            type: string
+          example: >-
+            ads_read,ads_management,pages_show_list,business_management,pages_manage_metadata,pages_read_engagement
+        - name: app_id
+          in: query
+          schema:
+            type: integer
+          example: '799369954601524'
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBAIXQE31QKnKQ72lzRH9HseTNxnXPOvsTALamWMkqjTPalttMKuXQOnD6P7MTdMCzYnpYJpZBcinEtEB8fZBZAwTOlJdAHXZBtEdTpY7qyUlBPvUw29Hw2XWGzyVwDYYAz2mZCuZBJiWfwNfKqLSg7dJjXhp5QSLD4aP724Szwh
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /1756478521269273/page_whatsapp_number_verification:
+    post:
+      tags:
+        - General
+      summary: send otp
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBOxcvZB0UdiNlZB1l4zkvwwVYC8rYHF7XmBQ0BJf7c0UlLLhsUMKIt91tJ8PTUZAvgan5UdbTnrjd12dzlkvlDMG03GTp15ZC9qSRrjOn78o24ha7P6srA82DuzYuHPbdTX7WM0dCX0s8h1ZAhrC0tTYx3sMBIyKVxkkb4SWJvd2WAc45b4HNz
+        - name: whatsapp_number
+          in: query
+          schema:
+            type: integer
+          example: '919714779191'
+        - name: locale
+          in: query
+          schema:
+            type: string
+          example: en_US
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /{adId}/insights:
+    get:
+      tags:
+        - General
+      summary: Get Ad Insights
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: string
+          example: spend,impressions,cpc,cpm,ctr
+        - name: access_token
+          in: query
+          schema:
+            type: string
+          example: >-
+            EAALXBdIwKjQBOyZCMFcYBX8RUimNbAnodJ1z6ROp5diz0NGfmYDXmpeS4rP0zUyj3PHpsOwESeSSL3jc6Tb3Hfmt4rZB5ZBFFa1ocNmtywxVfsKIRZActpoojFySwUkP4I7DOem9tEgagNLiqcRI8b4Vcyyr3SjPPBa65I2ZC4p7A1nRSfWXpvhUDZAaZAPvBPn
+        - name: time_range
+          in: query
+          schema:
+            type: string
+          example: '{''since'': ''2024-0-09'', ''until'': ''2024-07-20''}'
+        - name: adId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '120209945206580101'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
