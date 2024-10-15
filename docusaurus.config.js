@@ -44,7 +44,7 @@ const config = {
         configuration: {
           spec: {
             // Put the URL to your OpenAPI document here:
-            url: 'https://drive.google.com/file/d/1rpBzTCF7Ct9zvuPWvcRCUU9VYhRXiQwd/view?usp=sharing',
+            url: 'https://raw.githubusercontent.com/Aman-web-dev/onboarding-docs/refs/heads/main/collection.yml',
           },
         },
       },
